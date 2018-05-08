@@ -1,0 +1,78 @@
+# Welcome to serverless. Read the docs
+# https://serverless.com/framework/docs/
+
+# Serverless.yml is the configuration the CLI
+# uses to deploy your code to your provider of choice
+
+# The `service` block is the name of the service
+service: serverless-hello-world
+
+# The `provider` block defines where your service will be deployed
+provider:
+  name: aws
+  runtime: nodejs6.10
+  environment:
+    sqs_url:
+      Ref: Messages
+
+# The `functions` block defines what code to deploy
+functions:
+  helloWorld:
+    handler: SNSDispatcherFunction.handler
+    # The `events` block defines how to trigger the handler.helloWorld code
+    events:
+      - http:
+          path: / 
+          method: get
+          cors: true
+      - s3: photoasdkf
+  myNewFunction:
+    handler: handler.helloWorld 
+    events:
+      - sns: dispatch
+    ref:
+  sqsDispatcher:
+    handler: sqs_dispatcher.handler
+    events:
+      - http: 
+          path: /sqsTest
+          method: get
+          cors: true 
+  sqsReceiver:
+    handler: sqs_receive.handler
+    events:
+      - http:
+          path: /sqsReceiveTest
+          method: get
+          cors: true
+
+custom:
+  sqs: myNewMessageQueue
+
+
+resources:
+  Resources:
+    S3BucketPhotos:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: mycoolnewbucket
+    TodosDynamoDbTable: 
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: mycooltable
+    Messages:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:custom.sqs}
+        MessageRetentionPeriod: 1209600
+        VisibilityTimeout: 60
