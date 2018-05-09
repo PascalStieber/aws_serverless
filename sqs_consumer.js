@@ -9,7 +9,7 @@ var sqs = new AWS.SQS({apiVersion: '2012-11-05'});
 
 exports.handler = function(event, context) {  
     console.log("\n\nLoading sqs_receiver\n\n");
-var queueURL = "https://sqs.us-east-1.amazonaws.com/961215281246/blabla";
+var queueURL = process.env.sqs_url
 
   var params = {
    AttributeNames: [
@@ -28,6 +28,7 @@ var queueURL = "https://sqs.us-east-1.amazonaws.com/961215281246/blabla";
     if (err) {
       console.log("Receive Error", err);
     } else if (data.Messages) {
+      console.log(data.Messages)
       var deleteParams = {
         QueueUrl: queueURL,
         ReceiptHandle: data.Messages[0].ReceiptHandle

@@ -5,7 +5,7 @@
 # uses to deploy your code to your provider of choice
 
 # The `service` block is the name of the service
-service: serverless-hello-world
+service: aws-serverless
 
 # The `provider` block defines where your service will be deployed
 provider:
@@ -25,29 +25,25 @@ functions:
           path: / 
           method: get
           cors: true
-      - s3: photoasdkf
-  myNewFunction:
-    handler: handler.helloWorld 
-    events:
-      - sns: dispatch
-    ref:
-  sqsDispatcher:
-    handler: sqs_dispatcher.handler
+      - s3: mycools3bucket
+  
+  sqsProducer:
+    handler: sqs_producer.handler
     events:
       - http: 
-          path: /sqsTest
+          path: /sqsproducer
           method: get
           cors: true 
-  sqsReceiver:
-    handler: sqs_receive.handler
+  sqsConsumer:
+    handler: sqs_consumer.handler
     events:
       - http:
-          path: /sqsReceiveTest
+          path: /sqsconsumer
           method: get
           cors: true
 
 custom:
-  sqs: myNewMessageQueue
+  sqs: mycoolnewqueue2
 
 
 resources:
@@ -55,7 +51,7 @@ resources:
     S3BucketPhotos:
       Type: AWS::S3::Bucket
       Properties:
-        BucketName: mycoolnewbucket
+        BucketName: mycoolnewbucket2
     TodosDynamoDbTable: 
       Type: AWS::DynamoDB::Table
       DeletionPolicy: Retain
@@ -69,7 +65,7 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: mycooltable
+        TableName: mycoolnewtable3
     Messages:
       Type: AWS::SQS::Queue
       Properties:

@@ -1,8 +1,6 @@
 {
-  "accessKeyId": "AKIAJWKZVVSSAHGPX6SQ",
-  "secretAccessKey": "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",
+  "accessKeyId": "AKIAIIU4SWKAE7LLQDUA",
+  "secretAccessKey": "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",
   "region": "us-east-1"
 }
-
-#export AWS_ACCESS_KEY_ID=AKIAJWKZVVSSAHGPX6SQ
-#export AWS_SECRET_ACCESS_KEY=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
+	
